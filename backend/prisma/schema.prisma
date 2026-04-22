@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                String   @id @default(uuid())
+  name              String?
+  phone             String?  @unique
+  email             String?  @unique
+  googleId          String?  @unique
+  pointsBalance     Int      @default(0)
+  isBlocked         Boolean  @default(false)
+  deviceFingerprint String?
+  createdAt         DateTime @default(now())
+
+  adWatchSessions   AdWatchSession[]
+  redemptions       Redemption[]
+}
+
+model Ad {
+  id              String   @id @default(uuid())
+  title           String
+  videoUrl        String
+  thumbnailUrl    String?
+  durationSeconds Int
+  rewardPoints    Int
+  isActive        Boolean  @default(false)
+  viewsCount      Int      @default(0)
+  createdAt       DateTime @default(now())
+
+  adWatchSessions AdWatchSession[]
+}
+
+model AdWatchSession {
+  id            String   @id @default(uuid())
+  userId        String
+  adId          String
+  sessionToken  String   @unique
+  watchedAt     DateTime @default(now())
+  isCompleted   Boolean  @default(false)
+  pointsAwarded Int      @default(0)
+
+  user User @relation(fields: [userId], references: [id])
+  ad   Ad   @relation(fields: [adId], references: [id])
+}
+
+model Redemption {
+  id             String   @id @default(uuid())
+  userId         String
+  pointsSpent    Int
+  redemptionCode String   @unique
+  qrData         String?
+  generatedAt    DateTime @default(now())
+  expiresAt      DateTime
+  status         String   @default("active") // active, used, expired
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model SystemSettings {
+  key   String @id
+  value String
+}
