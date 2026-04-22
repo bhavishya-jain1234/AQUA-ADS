@@ -1,4 +1,8 @@
-## QR AQUA — Run locally
+# AQUA-ADS (QR AQUA)
+
+Web platform for the AQUA ads → rewards experience.
+
+## Run locally
 
 ### Prerequisites
 - Node.js (LTS recommended)
