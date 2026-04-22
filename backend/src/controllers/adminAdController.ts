@@ -59,6 +59,11 @@ export const setActive = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     const { isActive } = req.body ?? {};
 
+    if (!id || typeof id !== 'string') {
+      res.status(400).json({ error: 'id is required and must be a string' });
+      return;
+    }
+
     const ad = await prisma.ad.update({
       where: { id },
       data: { isActive: Boolean(isActive) },

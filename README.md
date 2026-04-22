@@ -1,4 +1,4 @@
-# AQUA-ADS (QR AQUA)
+# AQUA ADS (QR AQUA)
 
 Web platform for the AQUA ads → rewards experience.
 

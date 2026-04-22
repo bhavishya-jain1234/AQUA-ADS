@@ -68,7 +68,6 @@ const AdminAds = () => {
       const uploadRes = await apiClient.post('/admin/ads/upload', form, {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
         },
       });
 

@@ -20,9 +20,12 @@ const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('aqua_token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  // Don't override Authorization header if it's already set (e.g., for admin requests)
+  if (!config.headers.Authorization) {
+    const token = localStorage.getItem('aqua_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
   }
   return config;
 });

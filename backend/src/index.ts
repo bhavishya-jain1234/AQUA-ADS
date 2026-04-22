@@ -21,12 +21,13 @@ app.use(express.json());
 // Serve uploaded ad media
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
+// Mount more specific routes before general routes to avoid conflicts
+app.use('/api/admin/ads', adminAdRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/ads', adRoutes);
 app.use('/api/redeem', redeemRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/admin/ads', adminAdRoutes);
 
 app.get('/', (req, res) => {
   res.send('AQUA_ADS Backend API is running. Use /api/* routes or open the frontend at http://localhost:5173');
