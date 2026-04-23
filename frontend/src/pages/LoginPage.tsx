@@ -13,6 +13,12 @@ function getLoginErrorMessage(err: unknown, fallback: string): string {
   // Axios "Network Error" / no response (backend down, wrong base URL, CORS/proxy issues).
   const message: string | undefined = typeof anyErr?.message === 'string' ? anyErr.message : undefined;
   if (!anyErr?.response && message) {
+    if (message.includes("Failed to construct 'URL'")) {
+      const api = import.meta.env.VITE_API_BASE_URL;
+      const supa = import.meta.env.VITE_SUPABASE_URL;
+      return `URL Error: Check Vercel Env Vars. VITE_API_BASE_URL='${api}', VITE_SUPABASE_URL='${supa}'`;
+    }
+
     const lower = message.toLowerCase();
     if (lower.includes('network') || lower.includes('failed to fetch') || lower.includes('ecconnrefused') || lower.includes('connect')) {
       const base = (import.meta.env.VITE_API_BASE_URL?.trim() || '/api').replace(/\/$/, '');
@@ -114,7 +120,12 @@ const LoginPage = () => {
       if (cancelled) return;
       if (sessionError) {
         clearSafetyTimer();
-        setError(sessionError.message);
+        if (sessionError.message.includes("Failed to construct 'URL'")) {
+          const supa = import.meta.env.VITE_SUPABASE_URL;
+          setError(`Supabase URL Error: Check Vercel Env Vars. VITE_SUPABASE_URL='${supa}'`);
+        } else {
+          setError(sessionError.message);
+        }
         setCheckingSession(false);
         return;
       }
