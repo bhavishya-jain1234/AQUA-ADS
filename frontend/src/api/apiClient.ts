@@ -3,13 +3,17 @@ import axios from 'axios';
 function resolveApiBaseUrl(): string {
   let explicit = import.meta.env.VITE_API_BASE_URL?.trim();
   if (explicit) {
-    if (!explicit.startsWith('http://') && !explicit.startsWith('https://') && !explicit.startsWith('/')) {
-      explicit = 'https://' + explicit;
+    if (!explicit.startsWith('http://') && !explicit.startsWith('https://')) {
+      // If it starts with a slash, we prepend window.location.origin
+      if (explicit.startsWith('/')) {
+        explicit = (typeof window !== 'undefined' ? window.location.origin : '') + explicit;
+      } else {
+        explicit = 'https://' + explicit;
+      }
     }
-    return explicit.replace(/\/$/, '');
+    const cleanUrl = explicit.replace(/\/$/, '');
+    if (cleanUrl) return cleanUrl;
   }
-  // Same-origin /api — Vite dev & preview proxy to the backend; for hosted SPAs on a
-  // different API host, set VITE_API_BASE_URL at build time.
   return typeof window !== 'undefined' ? `${window.location.origin}/api` : '/api';
 }
 
