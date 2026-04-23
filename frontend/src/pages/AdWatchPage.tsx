@@ -41,7 +41,9 @@ const AdWatchPage = () => {
           navigate('/limit-exceeded', { state: { resetAt: err.response?.data?.resetAt } });
           return;
         }
-        setError(err.response?.data?.error || 'Failed to load ad session.');
+        const backendError = err?.response?.data?.error;
+        const msg = err?.message || '';
+        setError(backendError || `Network Error: ${msg}. Make sure backend is running.`);
       }
     };
     initSession();
