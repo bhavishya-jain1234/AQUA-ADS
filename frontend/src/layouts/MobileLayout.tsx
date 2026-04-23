@@ -11,6 +11,7 @@ const MobileLayout = () => {
     { name: 'Profile', path: '/profile', icon: User },
   ];
 
+  return (
     <div className="flex flex-col h-[100dvh] w-full relative bg-black">
       {/* Top Right Navigation */}
       <nav className="fixed top-4 right-4 z-50 bg-black/60 backdrop-blur-xl border border-white/10 p-1.5 rounded-2xl shadow-2xl overflow-x-auto max-w-[calc(100vw-32px)] no-scrollbar">
@@ -38,6 +39,7 @@ const MobileLayout = () => {
         <Outlet />
       </main>
     </div>
+  );
 };
 
 export default MobileLayout;
